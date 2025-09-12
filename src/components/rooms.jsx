@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { cookies } from "../global/config.js";
-import { addDoc, collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
 import { database } from "../../firebase-config.js";
 
 function EnterRoom({ setAuth }) {
@@ -17,7 +17,7 @@ function EnterRoom({ setAuth }) {
     useEffect(() => {
         if (!room) return;
 
-        const queryMessage = query(messagesRef, where("room", "==", cookies.get("room-name")));
+        const queryMessage = query(messagesRef, where("room", "==", cookies.get("room-name")), orderBy("timestamp"));
 
         const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
         let messages = [];
@@ -57,7 +57,8 @@ function EnterRoom({ setAuth }) {
         const message = {
             "sender": cookies.get("username"),
             "message": messageInputRef.current.value,
-            "room": cookies.get("room-name")
+            "room": cookies.get("room-name"),
+            "timestamp": serverTimestamp()
         }
         if (messageInputRef.current.value === "") return;
 
