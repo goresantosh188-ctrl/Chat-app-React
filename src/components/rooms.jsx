@@ -17,6 +17,7 @@ function EnterRoom({ setAuth }) {
     useEffect(() => {
         console.log("In useEffect...");
         console.log("Checking if in a room...");
+        console.log("Room")
         if (!room) return;
 
         console.log("Passed room meaning room is set.");
