@@ -36,7 +36,7 @@ function EnterRoom({ setAuth }) {
 
     const createRoom = async (roomName) => {
 
-        const queryMessage = query(roomsRef, where("name", "!==", roomName))
+        const queryMessage = query(roomsRef, where("name", "!=", roomName))
         const querySnapshot = await getDocs(queryMessage);
 
         if (querySnapshot.empty) {
