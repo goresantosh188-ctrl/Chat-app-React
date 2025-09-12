@@ -1,28 +1,40 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { cookies } from "../global/config.js";
+import { addDoc, collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { database } from "../../firebase-config.js";
 
 function EnterRoom({ setAuth }) {
     const [room, setRoom] = useState(false);
-    const [messages, setMessages] = useState([{}]);
+    const [messages, setMessages] = useState([]);
     console.log(room);
 
     const roomInputRef = useRef(null);
     const messageInputRef = useRef(null);
 
-    const createRoom = async (roomName) => {
-        const response = await axios.get("https://chat-app-react-4y3l.onrender.com/api/rooms");
-        const rooms = response.data.rooms
+    const messagesRef = collection(database, "messages");
+    const roomsRef = collection(database, "rooms");
 
-        if (rooms.some(room => room.name.toLowerCase() === roomName.toLowerCase())) {
-            setMessages(rooms.find(room => room.name === roomName)?.messages);
-            console.log(messages);
-        }
-        else {
-            axios.post("https://chat-app-react-4y3l.onrender.com/api/rooms", {
-                "name": roomName
+    const createRoom = async (roomName) => {
+
+        useEffect(() => {
+            const queryMessage = query(roomsRef, where("name", "===", roomName));
+            onSnapshot(queryMessage, snapshot => {
+                let messages = []
+                snapshot.forEach(doc => {
+                    messages.push({...doc.data(), id: doc.id})
+                })
+                setMessages(messages);
             })
+        }, [])
+
+        const queryMessage = query(roomsRef, where("name", "!==", roomName))
+        const querySnapshot = await getDocs(queryMessage);
+
+        if (querySnapshot.empty) {
+            await addDoc(roomsRef, { name: roomInputRef.current.value});
         }
+
         cookies.set("room-name", roomInputRef.current.value);
         setRoom(roomInputRef.current.value);
     }
@@ -49,9 +61,9 @@ function EnterRoom({ setAuth }) {
             "sender": cookies.get("username"),
             "message": messageInputRef.current.value
         }
-        const result = await axios.post(`https://chat-app-react-4y3l.onrender.com/api/rooms/${cookies.get("room-name")}/messages`, message);
-        setMessages(prevMessages => [...prevMessages, message]);
-        messageInputRef.current.value = "";
+        if (messageInputRef.current.value === "") return;
+
+        addDoc(messagesRef, message)
     }
 
     const messagesInHTML = messages ? messages.map(message => {
