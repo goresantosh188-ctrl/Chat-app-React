@@ -57,7 +57,7 @@ function EnterRoom({ setAuth }) {
         const message = {
             "sender": cookies.get("username"),
             "message": messageInputRef.current.value,
-            "room": roomInputRef.current.value
+            "room": cookies.get("room-name")
         }
         if (messageInputRef.current.value === "") return;
 
