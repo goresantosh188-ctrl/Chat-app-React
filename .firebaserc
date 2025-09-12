@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "my-chat-app-45398"
+  },
+  "targets": {
+    "my-chat-app-45398": {
+      "hosting": {
+        "web": [
+          "my-chat-app-45398"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
