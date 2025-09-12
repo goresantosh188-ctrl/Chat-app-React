@@ -136,6 +136,24 @@ app.post("/api/accounts", (req, res) => {
   });
 });
 
+app.get('/api/rooms', (req, res) => {
+  fs.readFile(roomsFile, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading rooms.json:', err);
+      return res.status(500).json({ error: 'Failed to read rooms data' });
+    }
+
+    try {
+      const roomsData = JSON.parse(data);
+      res.json(roomsData);
+    } catch (parseErr) {
+      console.error('Error parsing rooms.json:', parseErr);
+      return res.status(500).json({ error: 'Invalid JSON format in rooms.json' });
+    }
+  });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
