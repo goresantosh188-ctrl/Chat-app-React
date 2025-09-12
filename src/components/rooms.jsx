@@ -15,15 +15,27 @@ function EnterRoom({ setAuth }) {
     const messagesRef = collection(database, "messages");
 
     useEffect(() => {
+        console.log("In useEffect...");
+        console.log("Checking if in a room...");
         if (!room) return;
 
+        console.log("Passed room meaning room is set.");
+        console.log("Sending query message...")
         const queryMessage = query(messagesRef, where("room", "==", roomInputRef.current.value));
 
+        console.log("Query message set.");
+        console.log("Setting onSnapshot function...");
         const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
+            console.log("Inside onSnapshot function.");
         let messages = [];
+        console.log("Attempting to cycle through documents...")
         snapshot.forEach((doc) => {
+            console.log("Cycling through documents");
+            console.log("Current document: ", doc);
             messages.push({ ...doc.data(), id: doc.id });
+            console.log("New document added to array messages.");
         });
+        console.log("Cycle is complete");
         setMessages(messages);
         });
 
