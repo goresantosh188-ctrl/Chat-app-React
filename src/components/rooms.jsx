@@ -11,7 +11,7 @@ function EnterRoom({ setAuth }) {
     const messageInputRef = useRef(null);
 
     const createRoom = async (roomName) => {
-        const response = await axios.get("/src/database/rooms.json");
+        const response = await axios.get("/database/rooms.json");
         const rooms = response.data.rooms
 
         if (rooms.some(room => room.name.toLowerCase() === roomName.toLowerCase())) {
@@ -19,7 +19,7 @@ function EnterRoom({ setAuth }) {
             console.log(messages);
         }
         else {
-            axios.post("http://localhost:5000/api/rooms", {
+            axios.post("https://chat-app-react-4y3l.onrender.com/api/rooms", {
                 "name": roomName
             })
         }
@@ -49,7 +49,7 @@ function EnterRoom({ setAuth }) {
             "sender": cookies.get("username"),
             "message": messageInputRef.current.value
         }
-        const result = await axios.post(`http://localhost:5000/api/rooms/${cookies.get("room-name")}/messages`, message);
+        const result = await axios.post(`https://chat-app-react-4y3l.onrender.com/api/rooms/${cookies.get("room-name")}/messages`, message);
         setMessages(prevMessages => [...prevMessages, message]);
         messageInputRef.current.value = "";
     }
