@@ -15,7 +15,7 @@ function EnterRoom({ setAuth }) {
     const messagesRef = collection(database, "messages");
 
     useEffect(() => {
-        if (room) return;
+        if (!room) return;
 
         const queryMessage = query(messagesRef, where("room", "==", roomInputRef.current.value));
 
@@ -62,7 +62,7 @@ function EnterRoom({ setAuth }) {
         if (messageInputRef.current.value === "") return;
 
         addDoc(messagesRef, message)
-    
+        
     }
 
     const messagesInHTML = messages ? messages.map(message => {
