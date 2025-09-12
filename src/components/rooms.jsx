@@ -17,7 +17,7 @@ function EnterRoom({ setAuth }) {
     useEffect(() => {
         if (!room) return;
 
-        const queryMessage = query(messagesRef, where("room", "==", roomInputRef.current.value));
+        const queryMessage = query(messagesRef, where("room", "==", roomInputRef.current?.value));
 
         const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
         let messages = [];
