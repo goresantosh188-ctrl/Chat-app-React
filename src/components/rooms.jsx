@@ -13,15 +13,12 @@ function EnterRoom({ setAuth }) {
     const messageInputRef = useRef(null);
 
     const messagesRef = collection(database, "messages");
-    const roomsRef = collection(database, "rooms");
 
     useEffect(() => {
-        if (!room) return; // Don't run if no room selected
+        if (!room) return;
 
-        // Query rooms where name == room
-        const queryMessage = query(roomsRef, where("name", "==", room));
+        const queryMessage = query(messagesRef, where("room", "==", roomName));
 
-        // Listen for realtime updates
         const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
         let messages = [];
         snapshot.forEach((doc) => {
@@ -30,19 +27,11 @@ function EnterRoom({ setAuth }) {
         setMessages(messages);
         });
 
-        // Cleanup listener on room change/unmount
         return () => unsubscribe();
     }, [room]);
 
-    const createRoom = async (roomName) => {
-
-        const queryMessage = query(roomsRef, where("name", "!=", roomName))
-        const querySnapshot = await getDocs(queryMessage);
-
-        if (querySnapshot.empty) {
-            await addDoc(roomsRef, { name: roomInputRef.current.value});
-        }
-
+    const createRoom = async () => {
+        
         cookies.set("room-name", roomInputRef.current.value);
         setRoom(roomInputRef.current.value);
     }
@@ -67,11 +56,13 @@ function EnterRoom({ setAuth }) {
     const sendMessage = async () => {
         const message = {
             "sender": cookies.get("username"),
-            "message": messageInputRef.current.value
+            "message": messageInputRef.current.value,
+            "room": roomInputRef.current.value
         }
         if (messageInputRef.current.value === "") return;
 
         addDoc(messagesRef, message)
+    
     }
 
     const messagesInHTML = messages ? messages.map(message => {
@@ -93,7 +84,7 @@ function EnterRoom({ setAuth }) {
                     <h1>Welcome back, {cookies.get("username")}!</h1>
                     <p>Room:</p>
                     <input ref={roomInputRef} placeholder="Enter room name..."></input>
-                    <button onClick={() => createRoom(roomInputRef.current.value)}>Enter</button>
+                    <button onClick={() => createRoom()}>Enter</button>
                     <br></br><br></br>
                     <button onClick={() => {cookies.remove("auth-token"); setAuth(false);}}>Sign out</button>
                 </div>
