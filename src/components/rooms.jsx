@@ -15,9 +15,9 @@ function EnterRoom({ setAuth }) {
     const messagesRef = collection(database, "messages");
 
     useEffect(() => {
-        if (!room) return;
+        if (room) return;
 
-        const queryMessage = query(messagesRef, where("room", "==", roomInputRef.current?.value));
+        const queryMessage = query(messagesRef, roomInputRef);
 
         const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
         let messages = [];
@@ -40,7 +40,7 @@ function EnterRoom({ setAuth }) {
         const handleKeyDown = (event) => {
         if (event.key === "Enter") {
             if (roomInputRef.current === document.activeElement) {
-            createRoom(roomInputRef.current.value);
+            createRoom();
             } else if (messageInputRef.current === document.activeElement) {
             sendMessage();
             }
