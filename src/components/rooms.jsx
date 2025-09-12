@@ -63,7 +63,7 @@ function EnterRoom({ setAuth }) {
         if (messageInputRef.current.value === "") return;
 
         addDoc(messagesRef, message)
-        messageInputRef.current.value == "";
+        messageInputRef.current.value = "";
     }
 
     const messagesInHTML = messages ? messages.map(message => {
