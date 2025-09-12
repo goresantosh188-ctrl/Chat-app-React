@@ -15,18 +15,26 @@ function EnterRoom({ setAuth }) {
     const messagesRef = collection(database, "messages");
     const roomsRef = collection(database, "rooms");
 
-    const createRoom = async (roomName) => {
+    useEffect(() => {
+        if (!room) return; // Don't run if no room selected
 
-        useEffect(() => {
-            const queryMessage = query(roomsRef, where("name", "===", roomName));
-            onSnapshot(queryMessage, snapshot => {
-                let messages = []
-                snapshot.forEach(doc => {
-                    messages.push({...doc.data(), id: doc.id})
-                })
-                setMessages(messages);
-            })
-        }, [])
+        // Query rooms where name == room
+        const queryMessage = query(roomsRef, where("name", "==", room));
+
+        // Listen for realtime updates
+        const unsubscribe = onSnapshot(queryMessage, (snapshot) => {
+        let messages = [];
+        snapshot.forEach((doc) => {
+            messages.push({ ...doc.data(), id: doc.id });
+        });
+        setMessages(messages);
+        });
+
+        // Cleanup listener on room change/unmount
+        return () => unsubscribe();
+    }, [room]);
+
+    const createRoom = async (roomName) => {
 
         const queryMessage = query(roomsRef, where("name", "!==", roomName))
         const querySnapshot = await getDocs(queryMessage);
