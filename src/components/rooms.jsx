@@ -22,7 +22,7 @@ function EnterRoom({ setAuth }) {
 
         console.log("Passed room meaning room is set.");
         console.log("Sending query message...")
-        const queryMessage = query(messagesRef, where("room", "==", roomInputRef.current.value));
+        const queryMessage = query(messagesRef, where("room", "==", cookies.get("room-name")));
 
         console.log("Query message set.");
         console.log("Setting onSnapshot function...");
