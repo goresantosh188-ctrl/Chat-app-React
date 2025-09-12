@@ -9,8 +9,8 @@ const PORT = 5000; // You can change this port if needed
 app.use(cors()); // Allow cross-origin requests from your React app
 app.use(express.json()); // Parse JSON body in POST requests
 
-const roomsFile = path.join(__dirname, 'src', 'database', 'rooms.json'); // Adjust paths if needed
-const accountsFile = path.join(__dirname, 'src', 'database', 'accounts.json');
+const roomsFile = path.join(__dirname, 'public', 'database', 'rooms.json'); // Adjust paths if needed
+const accountsFile = path.join(__dirname, 'public', 'database', 'accounts.json');
 console.log("Rooms files", roomsFile);
 
 // POST /api/rooms/:roomName/messages
