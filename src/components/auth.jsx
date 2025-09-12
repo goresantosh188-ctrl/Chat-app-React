@@ -41,7 +41,7 @@ function Auth({ setIsAuth }) {
             return;
         }
         
-        const accountData = await axios.get("/src/database/accounts.json");
+        const accountData = await axios.get("/database/accounts.json");
         const accounts = accountData.data;
 
         if(accounts.some(name => username === name)) {
@@ -54,7 +54,7 @@ function Auth({ setIsAuth }) {
         }
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-            axios.post("http://localhost:5000/api/accounts", {
+            axios.post("https://chat-app-react-4y3l.onrender.com/api/accounts", {
                 "username": cookies.get("username"),
                 "email": userCredentials.user.email,
                 "password": userCredentials.user.password
