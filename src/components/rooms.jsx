@@ -11,7 +11,7 @@ function EnterRoom({ setAuth }) {
     const messageInputRef = useRef(null);
 
     const createRoom = async (roomName) => {
-        const response = await axios.get("https://chat-app-react-4y3l.onrender.com/database/rooms.json");
+        const response = await axios.get("https://chat-app-react-4y3l.onrender.com/api/rooms");
         const rooms = response.data.rooms
 
         if (rooms.some(room => room.name.toLowerCase() === roomName.toLowerCase())) {
