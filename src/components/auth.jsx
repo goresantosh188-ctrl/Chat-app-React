@@ -21,6 +21,7 @@ function Auth({ setIsAuth }) {
     useEffect(async () => {
         if (!cookies.get("recaptcha-verifier")) {
             const recaptchaVerifier = new RecaptchaVerifier(
+                auth,
                 "recaptcha-container",
                 {
                 size: "normal",
@@ -28,7 +29,6 @@ function Auth({ setIsAuth }) {
                     console.log("reCAPTCHA verified", response);
                 },
                 },
-                auth
         );
         
         cookies.set("recaptcha-verifier", recaptchaVerifier);
