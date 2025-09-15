@@ -1,11 +1,11 @@
-import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPhoneNumber, RecaptchaVerifier, signInAnonymously, updateProfile } from "firebase/auth";
 import { auth, provider } from "../../firebase-config.js";
 import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/auth.module.css";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, getDoc, doc, updateDoc } from "firebase/firestore";
 import { database } from "../../firebase-config.js";
 
 function Auth({ setIsAuth }) {
@@ -17,6 +17,7 @@ function Auth({ setIsAuth }) {
     const [page, setPage] = useState("signup");
 
     const accountsRef = collection(database, "accounts");
+    const guestCounterRef = doc(database, "guestTracker", "counter");
 
     const recaptchaVerifierRef = useRef(null);
     const recaptchaWidgetIdRef = useRef(null);
@@ -188,6 +189,21 @@ function Auth({ setIsAuth }) {
             }
         }
     }
+    
+    const signInAsGuest = async () => {
+        const userCredential = await signInAnonymously(auth);
+        
+        const id = (await getDoc(guestCounterRef)).data().counter;
+
+        await updateProfile(userCredential.user, {
+            displayName: `Guest${id}`
+        })
+
+        const newId = id + 1;
+
+        await updateDoc(guestCounterRef, { "counter": newId });
+    }
+
     return(page === "signup" ? <>
         <div className="auth-container">
             <p>Create a new account to continue</p>   
@@ -199,8 +215,8 @@ function Auth({ setIsAuth }) {
                 <input value={password} onChange={(event) => setPassword(event.target.value)}type="password" placeholder="Password"></input>
                 <button type="submit">Sign Up</button>
             </form>
-            <p>Already have an account?</p>
-            <button onClick={() => setPage("login")}>Go to Log in</button>
+            <p>Already have an account?</p> <p>Dont want to create an account?</p>
+            <button onClick={() => setPage("login")}>Go to Log in</button> <button onClick={signInAsGuest}>Sign in later</button>
         </div>
     </> : page === "login" ? <>
         <div className="auth-container">
