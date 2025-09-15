@@ -14,6 +14,8 @@ function Auth({ setIsAuth }) {
     const [username, setUsername] = useState('');
     const [isOnSignUpPage, setIsOnSignUpPage] = useState(true);
 
+    const accountsRef = collection(database, "accounts");
+
     const loginWithGoogle = async () => {
         const result = await signInWithPopup(auth, provider);
         const authToken = result.user.refreshToken;
@@ -27,8 +29,6 @@ function Auth({ setIsAuth }) {
 
     const signUp = async (event) => {
         event.preventDefault();
-
-        const accountsRef = collection(database, "accounts");
 
         if (!username) {
             window.alert("Please enter a username");
@@ -65,13 +65,14 @@ function Auth({ setIsAuth }) {
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
             await addDoc(accountsRef, {
-                "username": cookies.get("username"),
+                "username": userCredentials.user.displayName,
                 "email": userCredentials.user.email,
                 "password": password
             });
             setIsAuth(true);
             window.alert(`User registered \n Username: ${username} \n Email: ${email} \n Password: ${password}`);
             cookies.set("auth-token", userCredentials.user.refreshToken);
+            cookies.set("username", userCredentials.user.displayName);
             cookies.set("email", userCredentials.user.email);
             cookies.set("password", password)
         }
@@ -90,6 +91,26 @@ function Auth({ setIsAuth }) {
             }
         }    
     }
+
+    const signIn = async () => {
+        const usernameQueryMessage = query(accountsRef, where("username", "==", username));
+        const usernameSnapshot = await getDocs(usernameQueryMessage);
+        
+        if (!usernameSnapshot.empty) {
+            try {
+                const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+                setIsAuth(true);
+                window.alert(`User logged in \n Username: ${username} \n Email: ${email} \n Password: ${password}`);
+                cookies.set("auth-token", userCredentials.user.refreshToken);
+                cookies.set("email", userCredentials.user.email);
+                cookies.set("password", password);
+            } catch (error) {
+                if (error.code === "auth/invalid-credential") {
+                    window.alert("Invalid credentials");
+                }
+            }
+        }
+    }
     return(isOnSignUpPage ? <>
         <div className="auth-container">
             <p>Create a new account to continue</p>   
@@ -103,7 +124,20 @@ function Auth({ setIsAuth }) {
             <p>Already have an account?</p>
             <button onClick={() => setIsOnSignUpPage(false)}>Go to Log in</button>
         </div>
-    </> : <>Log in</>)
+    </> : <>
+        <div className="auth-container">
+            <p>Sign in</p>
+            <button onClick={loginWithGoogle}>Sign in with google</button> 
+            <form className="sign-in-form" onSubmit={signIn}>
+                <input value={email} onChange={(event) => setEmail(event.target.value)}type="email" placeholder="Email"></input>
+                <input value={username} onChange={(event) => setUsername(event.target.value)}type="username" placeholder="Username"></input>
+                <input value={password} onChange={(event) => setPassword(event.target.value)}type="password" placeholder="Password"></input>
+                <button type="submit">Sign in</button>
+            </form>
+            <p>Dont have an account?</p>
+            <button>Go to Sign Up</button>
+        </div>
+    </>)
 }
 
 Auth.propTypes = {
