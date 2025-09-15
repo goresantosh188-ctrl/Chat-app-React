@@ -72,18 +72,18 @@ function EnterRoom({ setAuth }) {
     }) : "";
     return(room 
            ? <> <div className={styles.roomContainer}>
-                <h1>{cookies.get("room-name")}</h1>
-                <div className={styles.messages}>
-                    {messagesInHTML}
-                </div>
-                <input ref={messageInputRef} placeholder="Send...."></input>
-                <button onClick={sendMessage}>Send</button>
-                <br></br><br></br>
-                <button onClick={() => setRoom(false)}>Back</button>
-                <button onClick={() => {cookies.remove("auth-token"); setAuth(false);}}>Sign out</button>
+                    <h1>{cookies.get("room-name")}</h1>
+                    <div className={styles.messages}>
+                        {messagesInHTML}
+                    </div>
+                    <input ref={messageInputRef} placeholder="Send...."></input>
+                    <button onClick={sendMessage}>Send</button>
+                    <br></br><br></br>
+                    <button onClick={() => setRoom(false)}>Back</button>
+                    <button onClick={() => {cookies.remove("auth-token"); setAuth(false);}}>Sign out</button>
                 </div>
              </> 
-           : <> <div className="rooms-container">
+           : <> <div className={styles.roomsContainer}>
                     <h1>Welcome back, {cookies.get("username")}!</h1>
                     <input ref={roomInputRef} placeholder="Enter room name..."></input>
                     <button onClick={() => createRoom()}>Enter</button>
