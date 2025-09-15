@@ -49,6 +49,7 @@ function Auth({ setIsAuth }) {
         
         const usernameQueryMessage = query(accountsRef, where("username", "==", username));
         const usernameSnapshot = await getDocs(usernameQueryMessage);
+        console.log(usernameSnapshot);
 
         const emailQueryMessage = query(accountsRef, where("email", "==", email));
         const emailSnapshot = await getDocs(emailQueryMessage);
