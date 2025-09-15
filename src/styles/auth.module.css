@@ -1,4 +1,4 @@
-.sign-up-form, .signInForm {
+.signUpForm, .signInForm {
     display: flex;
     flex-direction: column;
 }
