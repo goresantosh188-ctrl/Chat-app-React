@@ -1,5 +1,5 @@
-import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-import { auth, provider } from "../../firebase-config.js";
+import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPhoneNumber } from "firebase/auth";
+import { auth, provider, recaptchaVerifier } from "../../firebase-config.js";
 import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -12,6 +12,8 @@ function Auth({ setIsAuth }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [SMScode, setSMScode] = useState(0);
     const [page, setPage] = useState("signup");
 
     const accountsRef = collection(database, "accounts");
@@ -25,6 +27,28 @@ function Auth({ setIsAuth }) {
         cookies.set("username", username);
         cookies.set("auth-token", authToken);
         
+    }
+
+    const loginWithPhoneNumber = async (event) => {
+        event.preventDefault();
+
+        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+        window.alert("An SMS has been sent to your phone number. Please enter it in the box below")
+        setPage("phone-login-post-sms");
+        cookies.set("confirmation-result", confirmationResult);
+    }
+
+    const ConfirmCodeToLoginWithPhoneNumber = async (event) => {
+        event.preventDefault();
+
+        const result = await cookies.get("confirmation-result").confirm(SMScode);
+        const authToken = result.user.refreshToken;   
+        const username = result.user.displayName;
+
+        cookies.set("username", username);
+        cookies.set("auth-token", authToken);
+
+        setIsAuth(true);
     }
 
     const signUp = async (event) => {
@@ -140,6 +164,7 @@ function Auth({ setIsAuth }) {
         <div className="auth-container">
             <p>Create a new account to continue</p>   
             <button onClick={loginWithGoogle}>Sign in with google</button> 
+            <button onClick={() => setPage("phone-login-pre-sms")}>Sign in with phone</button>
             <form className={styles.signUpForm} onSubmit={signUp}>
                 <input value={email} onChange={(event) => setEmail(event.target.value)}type="email" placeholder="Email"></input>
                 <input value={username} onChange={(event) => setUsername(event.target.value)}type="username" placeholder="Username"></input>
@@ -153,6 +178,7 @@ function Auth({ setIsAuth }) {
         <div className="auth-container">
             <p>Sign in</p>
             <button onClick={loginWithGoogle}>Sign in with google</button> 
+            <button onClick={() => setPage("phone-login-pre-sms")}>Sign in with phone</button>
             <form className={styles.signInForm} onSubmit={signIn}>
                 <input value={email} onChange={(event) => setEmail(event.target.value)}type="email" placeholder="Email"></input>
                 <input value={username} onChange={(event) => setUsername(event.target.value)}type="username" placeholder="Username"></input>
@@ -172,6 +198,20 @@ function Auth({ setIsAuth }) {
             </form>
             <button onClick={() => setPage("signup")}>Back</button>
         </div>
+    </> : page === "phone-login-pre-sms" ? <>
+        <div className="auth-container">
+            <form className={styles.phoneSignInFormPreSMS} onSubmit={loginWithPhoneNumber}>
+                <input type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Phone number"></input>
+                <button type="submit">Enter</button>
+            </form>
+            <button onClick={() => setPage("signup")}>Back</button>
+        </div>
+    </> : page === "phone-login-post-sms" ? <>
+        <h2>Please enter the code sent to you via SMS</h2>
+        <form className={styles.phoneSignInFormPostSMS} onSubmit={ConfirmCodeToLoginWithPhoneNumber}>
+            <input value={SMScode} onChange={(event) => setSMScode(event.target.value)} placeholder="ENTER SMS..."></input>
+            <button type="submit">Submit</button>
+        </form>
     </> : 
     <>Error 404: Could not find page</>)
 }

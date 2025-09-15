@@ -1,4 +1,4 @@
-.signUpForm, .signInForm, .forgotPasswordForm {
+.signUpForm, .signInForm, .forgotPasswordForm, .phoneSignInFormPreSMS, .phoneSignInFormPostSMS {
     display: flex;
     flex-direction: column;
     gap: 10px;
