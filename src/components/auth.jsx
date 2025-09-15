@@ -1,6 +1,6 @@
 import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, provider } from "../../firebase-config.js";
-import { cookies } from "../../global/config.js"
+import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
 import axios from "axios";
 import React, { useState } from "react";
