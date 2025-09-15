@@ -8,6 +8,10 @@
     text-align: start;
 }
 
+.messages p {
+    margin-left: 1vw;
+}
+
 .roomContainer {
     text-align: center;
 }
