@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import React, { useState } from "react";
 import styles from "../styles/auth.module.css";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { database } from "../../firebase-config.js";
 
 function Auth({ setIsAuth }) {
