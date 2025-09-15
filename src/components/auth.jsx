@@ -65,7 +65,7 @@ function Auth({ setIsAuth }) {
         try {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
             await addDoc(accountsRef, {
-                "username": userCredentials.user.displayName,
+                "username": username,
                 "email": userCredentials.user.email,
                 "password": password
             });
