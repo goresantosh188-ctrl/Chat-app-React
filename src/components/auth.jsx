@@ -124,7 +124,7 @@ function Auth({ setIsAuth }) {
         <div className="auth-container">
             <p>Create a new account to continue</p>   
             <button onClick={loginWithGoogle}>Sign in with google</button> 
-            <form className="sign-up-form" onSubmit={signUp}>
+            <form className={styles.sign-up-form} onSubmit={signUp}>
                 <input value={email} onChange={(event) => setEmail(event.target.value)}type="email" placeholder="Email"></input>
                 <input value={username} onChange={(event) => setUsername(event.target.value)}type="username" placeholder="Username"></input>
                 <input value={password} onChange={(event) => setPassword(event.target.value)}type="password" placeholder="Password"></input>
@@ -137,7 +137,7 @@ function Auth({ setIsAuth }) {
         <div className="auth-container">
             <p>Sign in</p>
             <button onClick={loginWithGoogle}>Sign in with google</button> 
-            <form className="sign-in-form" onSubmit={signIn}>
+            <form className={styles.signInForm} onSubmit={signIn}>
                 <input value={email} onChange={(event) => setEmail(event.target.value)}type="email" placeholder="Email"></input>
                 <input value={username} onChange={(event) => setUsername(event.target.value)}type="username" placeholder="Username"></input>
                 <input value={password} onChange={(event) => setPassword(event.target.value)}type="password" placeholder="Password"></input>
