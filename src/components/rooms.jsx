@@ -71,7 +71,7 @@ function EnterRoom({ setAuth }) {
         return(Boolean(messages) ? <p>{message.sender}: {message.message}</p> : null);
     }) : "";
     return(room 
-           ? <> 
+           ? <> <div className={styles.roomContainer}>
                 <h1>{cookies.get("room-name")}</h1>
                 <div className={styles.messages}>
                     {messagesInHTML}
@@ -81,6 +81,7 @@ function EnterRoom({ setAuth }) {
                 <br></br><br></br>
                 <button onClick={() => setRoom(false)}>Back</button>
                 <button onClick={() => {cookies.remove("auth-token"); setAuth(false);}}>Sign out</button>
+                </div>
              </> 
            : <> <div className="rooms-container">
                     <h1>Welcome back, {cookies.get("username")}!</h1>
