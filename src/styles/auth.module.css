@@ -1,6 +1,10 @@
 .signUpForm, .signInForm {
     display: flex;
     flex-direction: column;
-    transform: scale(1.5);
     gap: 10px;
+}
+
+.signUpForm:first-child, .signInForm:first-child {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
