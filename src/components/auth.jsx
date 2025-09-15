@@ -232,8 +232,8 @@ function Auth({ setIsAuth }) {
                 <input type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Phone number"></input>
                 <button type="submit">Enter</button>
             </form>
-            <button onClick={() => setPage("signup")}>Back</button>
             <div id="recaptcha-container"></div>
+            <button onClick={() => setPage("signup")}>Back</button>
         </div>
     </> : page === "phone-login-post-sms" ? <>
         <h2>Please enter the code sent to you via SMS</h2>
