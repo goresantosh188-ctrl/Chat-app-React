@@ -96,7 +96,9 @@ function Auth({ setIsAuth }) {
         }    
     }
 
-    const signIn = async () => {
+    const signIn = async (event) => {
+        event.preventDefault();
+
         const usernameQueryMessage = query(accountsRef, where("username", "==", username));
         const usernameSnapshot = await getDocs(usernameQueryMessage);
         
