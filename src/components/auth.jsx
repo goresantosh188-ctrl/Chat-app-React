@@ -72,7 +72,7 @@ function Auth({ setIsAuth }) {
             setIsAuth(true);
             window.alert(`User registered \n Username: ${username} \n Email: ${email} \n Password: ${password}`);
             cookies.set("auth-token", userCredentials.user.refreshToken);
-            cookies.set("username", userCredentials.user.displayName);
+            cookies.set("username", username);
             cookies.set("email", userCredentials.user.email);
             cookies.set("password", password)
         }
