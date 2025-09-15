@@ -12,7 +12,7 @@ function Auth({ setIsAuth }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [isOnSignUpPage, setIsOnSignUpPage] = useState(true);
+    const [page, setPage] = useState("signup");
 
     const accountsRef = collection(database, "accounts");
 
@@ -120,7 +120,7 @@ function Auth({ setIsAuth }) {
             window.alert(`Cannot find an account with username ${username}`)
         }
     }
-    return(isOnSignUpPage ? <>
+    return(page === "signup" ? <>
         <div className="auth-container">
             <p>Create a new account to continue</p>   
             <button onClick={loginWithGoogle}>Sign in with google</button> 
@@ -131,9 +131,9 @@ function Auth({ setIsAuth }) {
                 <button type="submit">Sign Up</button>
             </form>
             <p>Already have an account?</p>
-            <button onClick={() => setIsOnSignUpPage(false)}>Go to Log in</button>
+            <button onClick={() => setPage("login")}>Go to Log in</button>
         </div>
-    </> : <>
+    </> : page === "login" ? <>
         <div className="auth-container">
             <p>Sign in</p>
             <button onClick={loginWithGoogle}>Sign in with google</button> 
@@ -144,9 +144,11 @@ function Auth({ setIsAuth }) {
                 <button type="submit">Sign in</button>
             </form>
             <p>Dont have an account?</p>
-            <button onClick={() => setIsOnSignUpPage(true)}>Go to Sign Up</button>
+            <button onClick={() => setPage("signup")}>Go to Sign Up</button>
+            <button onClick={() => setPage("forgot-password")}>Forgot password?</button>
         </div>
-    </>)
+    </> : page == "forgot-password" ? <>forgot password page</> : 
+    <>Error 404: Could not find page</>)
 }
 
 Auth.propTypes = {
