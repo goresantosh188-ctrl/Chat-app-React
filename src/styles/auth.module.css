@@ -1,5 +1,6 @@
 .signUpForm, .signInForm {
     display: flex;
     flex-direction: column;
+    transform: scale(1.5);
     gap: 10px;
 }
