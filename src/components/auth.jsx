@@ -135,7 +135,7 @@ function Auth({ setIsAuth }) {
                 <button type="submit">Sign in</button>
             </form>
             <p>Dont have an account?</p>
-            <button>Go to Sign Up</button>
+            <button onClick={() => setIsOnSignUpPage(true)}>Go to Sign Up</button>
         </div>
     </>)
 }
