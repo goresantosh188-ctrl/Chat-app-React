@@ -120,7 +120,9 @@ function Auth({ setIsAuth }) {
         }
     }
 
-    const resetPassword = async () => {
+    const resetPassword = async (event) => {
+        event.preventDefault();
+
         await sendPasswordResetEmail(auth, email);
         window.alert("Password reset email has been sent. Please check both your main and spam inbox.");
     }
