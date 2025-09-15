@@ -57,7 +57,7 @@ function Auth({ setIsAuth }) {
     const loginWithPhoneNumber = async (event) => {
         event.preventDefault();
 
-        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifierRef.current);
         window.alert("An SMS has been sent to your phone number. Please enter it in the box below")
         setPage("phone-login-post-sms");
         
