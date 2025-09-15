@@ -1,4 +1,4 @@
-import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth, provider } from "../../firebase-config.js";
 import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
@@ -66,8 +66,7 @@ function Auth({ setIsAuth }) {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
             await addDoc(accountsRef, {
                 "username": username,
-                "email": userCredentials.user.email,
-                "password": password
+                "email": userCredentials.user.email
             });
             setIsAuth(true);
             window.alert(`User registered \n Username: ${username} \n Email: ${email} \n Password: ${password}`);
@@ -120,6 +119,11 @@ function Auth({ setIsAuth }) {
             window.alert(`Cannot find an account with username ${username}`)
         }
     }
+
+    const resetPassword = async () => {
+        await sendPasswordResetEmail(auth, email);
+        window.alert("Password reset email has been sent. Please check both your main and spam inbox.");
+    }
     return(page === "signup" ? <>
         <div className="auth-container">
             <p>Create a new account to continue</p>   
@@ -147,7 +151,16 @@ function Auth({ setIsAuth }) {
             <button onClick={() => setPage("signup")}>Go to Sign Up</button>
             <button onClick={() => setPage("forgot-password")}>Forgot password?</button>
         </div>
-    </> : page == "forgot-password" ? <>forgot password page</> : 
+    </> : page == "forgot-password" ? <>
+        <div className="auth-container">
+            <p>Reset password</p>
+            <form className={styles.forgotPasswordForm} onSubmit={resetPassword}>
+                <input value={email} onChange={(event) => setEmail(event.target.value)}type="email"></input>
+                <button type="submit">Reset password</button>
+            </form>
+            <button onClick={() => setPage("signup")}>Back</button>
+        </div>
+    </> : 
     <>Error 404: Could not find page</>)
 }
 
