@@ -3,7 +3,7 @@ import { auth, provider } from "../../firebase-config.js";
 import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/auth.module.css";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { database } from "../../firebase-config.js";
@@ -18,9 +18,13 @@ function Auth({ setIsAuth }) {
 
     const accountsRef = collection(database, "accounts");
 
+    const recaptchaVerifierRef = useRef(null);
+    const recaptchaWidgetIdRef = useRef(null);
+    const confirmationResultRef = useRef(null);
+
     useEffect(async () => {
         if (!cookies.get("recaptcha-verifier")) {
-            window.recaptchaVerifier = new RecaptchaVerifier(
+            const recaptchaVerifier = new RecaptchaVerifier(
                 auth,
                 "recaptcha-container",
                 {
@@ -31,9 +35,11 @@ function Auth({ setIsAuth }) {
                 },
         );
         
-        const widgetId = await cookies.get("recaptcha-verifier").render()
+        recaptchaVerifierRef.current = recaptchaVerifier;
 
-        window.recaptchaWidgetId = widgetId;
+        const widgetId = await recaptchaVerifierRef.current.render()
+
+        recaptchaWidgetIdRef.current = widgetId;
         }
     }, []);
 
@@ -51,16 +57,17 @@ function Auth({ setIsAuth }) {
     const loginWithPhoneNumber = async (event) => {
         event.preventDefault();
 
-        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
         window.alert("An SMS has been sent to your phone number. Please enter it in the box below")
         setPage("phone-login-post-sms");
-        cookies.set("confirmation-result", confirmationResult);
+        
+        confirmationResultRef.current = confirmationResult;
     }
 
     const ConfirmCodeToLoginWithPhoneNumber = async (event) => {
         event.preventDefault();
 
-        const result = await cookies.get("confirmation-result").confirm(SMScode);
+        const result = await confirmationResultRef.current.confirm(SMScode);
 
         const authToken = result.user.refreshToken;   
         const username = result.user.displayName;
