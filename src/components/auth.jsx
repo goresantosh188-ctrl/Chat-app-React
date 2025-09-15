@@ -1,5 +1,5 @@
-import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPhoneNumber } from "firebase/auth";
-import { auth, provider, recaptchaVerifier } from "../../firebase-config.js";
+import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+import { auth, provider } from "../../firebase-config.js";
 import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -17,6 +17,27 @@ function Auth({ setIsAuth }) {
     const [page, setPage] = useState("signup");
 
     const accountsRef = collection(database, "accounts");
+
+    useEffect(async () => {
+        if (!cookies.get("recaptcha-verifier")) {
+            const recaptchaVerifier = new RecaptchaVerifier(
+                "recaptcha-container",
+                {
+                size: "normal",
+                callback: (response) => {
+                    console.log("reCAPTCHA verified", response);
+                },
+                },
+                auth
+        );
+        
+        cookies.set("recaptcha-verifier", recaptchaVerifier);
+
+        const widgetId = await cookies.get("recaptcha-verifier").render()
+
+        cookies.set("recaptchaWidgetId", widgetId);
+        }
+    }, []);
 
     const loginWithGoogle = async () => {
         const result = await signInWithPopup(auth, provider);
@@ -42,6 +63,7 @@ function Auth({ setIsAuth }) {
         event.preventDefault();
 
         const result = await cookies.get("confirmation-result").confirm(SMScode);
+        
         const authToken = result.user.refreshToken;   
         const username = result.user.displayName;
 
@@ -205,6 +227,7 @@ function Auth({ setIsAuth }) {
                 <button type="submit">Enter</button>
             </form>
             <button onClick={() => setPage("signup")}>Back</button>
+            <div id="recaptcha-container"></div>
         </div>
     </> : page === "phone-login-post-sms" ? <>
         <h2>Please enter the code sent to you via SMS</h2>

@@ -27,4 +27,3 @@ const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const database = getFirestore();
-export const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {});
