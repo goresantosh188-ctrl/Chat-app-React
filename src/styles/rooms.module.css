@@ -1,6 +1,6 @@
 .messages {
     max-height: 250px;
-    max-width: 250px;
+    max-width: 500px;
     overflow-y: scroll;
     border: 5px solid black;
     border-radius: 20px;
