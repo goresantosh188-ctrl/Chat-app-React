@@ -18,6 +18,9 @@
 
 .roomContainer input, .roomContainer button:first-of-type {
     transform: scale(1.5);
+}
+
+.roomContainer input {
     margin-left: 10vw;
 }
 
