@@ -58,7 +58,7 @@ function Auth({ setIsAuth }) {
             return;
         }
         if (!emailSnapshot.empty) {
-            window.alert(`The email ${accounts.email} is already taken. Please choose another one or log into said account.`);
+            window.alert(`The email ${email} is already taken. Please choose another one or log into said account.`);
             return;
         }
 
@@ -86,7 +86,7 @@ function Auth({ setIsAuth }) {
                 return;
             }
             else if (error.code === "auth/email-already-in-use") {
-                window.alert(`The email ${accounts.email} is already taken. Please choose another one or log into said account.`);
+                window.alert(`The email ${email} is already taken. Please choose another one or log into said account.`);
                 return;
             }
             else {
