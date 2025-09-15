@@ -116,6 +116,9 @@ function Auth({ setIsAuth }) {
                 }
             }
         }
+        else {
+            window.alert(`Cannot find an account with username ${username}`)
+        }
     }
     return(isOnSignUpPage ? <>
         <div className="auth-container">
