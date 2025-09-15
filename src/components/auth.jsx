@@ -202,6 +202,10 @@ function Auth({ setIsAuth }) {
         const newId = id + 1;
 
         await updateDoc(guestCounterRef, { "counter": newId });
+
+        cookies.set("username", userCredential.user.displayName);
+
+        setIsAuth(true);
     }
 
     return(page === "signup" ? <>
