@@ -1,4 +1,4 @@
-import Auth from "./components/auth/auth.jsx";
+import Auth from "./components/auth.jsx";
 import EnterRoom from "./components/rooms.jsx";
 import { cookies } from "./global/config.js";
 import React, { useState } from "react";
