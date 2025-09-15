@@ -67,13 +67,13 @@ function Auth({ setIsAuth }) {
             await addDoc(accountsRef, {
                 "username": cookies.get("username"),
                 "email": userCredentials.user.email,
-                "password": userCredentials.user.password
+                "password": password
             });
             setIsAuth(true);
             window.alert(`User registered \n Username: ${username} \n Email: ${email} \n Password: ${password}`);
             cookies.set("auth-token", userCredentials.user.refreshToken);
             cookies.set("email", userCredentials.user.email);
-            cookies.set("password", userCredentials.user.password)
+            cookies.set("password", password)
         }
         catch (error) {
             if (error.code === "auth/missing-email") {
