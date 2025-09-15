@@ -3,7 +3,7 @@ import { auth, provider } from "../../firebase-config.js";
 import { cookies } from "../global/config.js"
 import PropTypes from "prop-types";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/auth.module.css";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { database } from "../../firebase-config.js";
@@ -63,7 +63,7 @@ function Auth({ setIsAuth }) {
         event.preventDefault();
 
         const result = await cookies.get("confirmation-result").confirm(SMScode);
-        
+
         const authToken = result.user.refreshToken;   
         const username = result.user.displayName;
 
