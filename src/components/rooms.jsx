@@ -3,6 +3,7 @@ import axios from "axios";
 import { cookies } from "../global/config.js";
 import { addDoc, collection, getDocs, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
 import { database } from "../../firebase-config.js";
+import styles from "../styles/rooms.module.css";
 
 function EnterRoom({ setAuth }) {
     const [room, setRoom] = useState(false);
@@ -72,7 +73,7 @@ function EnterRoom({ setAuth }) {
     return(room 
            ? <> 
                 <h1>{cookies.get("room-name")}</h1>
-                <div className="messages">
+                <div className={styles.messages}>
                     {messagesInHTML}
                 </div>
                 <input ref={messageInputRef} placeholder="Send...."></input>
