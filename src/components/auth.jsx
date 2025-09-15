@@ -20,7 +20,7 @@ function Auth({ setIsAuth }) {
 
     useEffect(async () => {
         if (!cookies.get("recaptcha-verifier")) {
-            const recaptchaVerifier = new RecaptchaVerifier(
+            window.recaptchaVerifier = new RecaptchaVerifier(
                 auth,
                 "recaptcha-container",
                 {
@@ -31,11 +31,9 @@ function Auth({ setIsAuth }) {
                 },
         );
         
-        cookies.set("recaptcha-verifier", recaptchaVerifier);
-
         const widgetId = await cookies.get("recaptcha-verifier").render()
 
-        cookies.set("recaptchaWidgetId", widgetId);
+        window.recaptchaWidgetId = widgetId;
         }
     }, []);
 
