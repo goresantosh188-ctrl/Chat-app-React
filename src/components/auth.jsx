@@ -22,8 +22,8 @@ function Auth({ setIsAuth }) {
     const recaptchaWidgetIdRef = useRef(null);
     const confirmationResultRef = useRef(null);
 
-    useEffect(async () => {
-        if (!cookies.get("recaptcha-verifier")) {
+    useEffect(() => {
+        if (page === "phone-login-pre-sms" && !cookies.get("recaptcha-verifier")) {
             const recaptchaVerifier = new RecaptchaVerifier(
                 auth,
                 "recaptcha-container",
@@ -37,11 +37,12 @@ function Auth({ setIsAuth }) {
         
         recaptchaVerifierRef.current = recaptchaVerifier;
 
-        const widgetId = await recaptchaVerifierRef.current.render()
+        recaptchaVerifierRef.current.render().then((widgetId) => {
+            recaptchaWidgetIdRef.current = widgetId;
+        });
 
-        recaptchaWidgetIdRef.current = widgetId;
         }
-    }, []);
+    }, [page]);
 
     const loginWithGoogle = async () => {
         const result = await signInWithPopup(auth, provider);
