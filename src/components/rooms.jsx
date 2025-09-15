@@ -84,7 +84,6 @@ function EnterRoom({ setAuth }) {
              </> 
            : <> <div className="rooms-container">
                     <h1>Welcome back, {cookies.get("username")}!</h1>
-                    <p>Room:</p>
                     <input ref={roomInputRef} placeholder="Enter room name..."></input>
                     <button onClick={() => createRoom()}>Enter</button>
                     <br></br><br></br>

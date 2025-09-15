@@ -1,6 +1,7 @@
 .messages {
-    max-height: 100px;
+    max-height: 250px;
     overflow-y: scroll;
     border: 5px solid black;
     border-radius: 20px;
+    margin-bottom: 20px;
 }

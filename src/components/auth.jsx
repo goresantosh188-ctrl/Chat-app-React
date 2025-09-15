@@ -123,8 +123,17 @@ function Auth({ setIsAuth }) {
     const resetPassword = async (event) => {
         event.preventDefault();
 
-        await sendPasswordResetEmail(auth, email);
-        window.alert("Password reset email has been sent. Please check both your main and spam inbox.");
+        try {
+            await sendPasswordResetEmail(auth, email);
+            window.alert("Password reset email has been sent. Please check both your main and spam inbox.");
+        } catch (error) {
+            if (error.code === "auth/missing-email") {
+                window.alert("Please enter an email");
+            }
+            else if (error.code === "auth/invalid-email") {
+                window.alert("Invalid email.");
+            }
+        }
     }
     return(page === "signup" ? <>
         <div className="auth-container">
@@ -157,7 +166,7 @@ function Auth({ setIsAuth }) {
         <div className="auth-container">
             <p>Reset password</p>
             <form className={styles.forgotPasswordForm} onSubmit={resetPassword}>
-                <input value={email} onChange={(event) => setEmail(event.target.value)}type="email"></input>
+                <input value={email} onChange={(event) => setEmail(event.target.value)}type="email" placeholder="Email"></input>
                 <button type="submit">Reset password</button>
             </form>
             <button onClick={() => setPage("signup")}>Back</button>
