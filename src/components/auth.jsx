@@ -81,6 +81,10 @@ function Auth({ setIsAuth }) {
                 window.alert("Email is Missing");
                 return;
             }
+            else if (error.code === "auth/invalid-email") {
+                window.alert("Invalid email");
+                return;
+            }
             else if (error.code === "auth/email-already-in-use") {
                 window.alert(`The email ${accounts.email} is already taken. Please choose another one or log into said account.`);
                 return;
