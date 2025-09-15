@@ -11,3 +11,7 @@
 .roomContainer {
     text-align: center;
 }
+
+.roomContainer input, .roomContainer button:first-of-type {
+    transform: scale(1.5);
+}
