@@ -229,7 +229,7 @@ function Auth({ setIsAuth }) {
     </> : page === "phone-login-pre-sms" ? <>
         <div className="auth-container">
             <form className={styles.phoneSignInFormPreSMS} onSubmit={loginWithPhoneNumber}>
-                <input type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Phone number"></input>
+                <input type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="+1234567890"></input>
                 <button type="submit">Enter</button>
             </form>
             <div id="recaptcha-container"></div>
