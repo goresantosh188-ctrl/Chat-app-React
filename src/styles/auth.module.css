@@ -5,6 +5,6 @@
 }
 
 .signUpForm:first-child, .signInForm:first-child {
-    margin-top: 10px;
+    margin-top: 10px !important;
     margin-bottom: 10px;
 }
