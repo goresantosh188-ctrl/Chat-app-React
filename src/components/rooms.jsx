@@ -14,6 +14,7 @@ function EnterRoom({ setAuth }) {
     const messageInputRef = useRef(null);
 
     const messagesRef = collection(database, "messages");
+    const typingRef = collection(database, "typing-in-room");
 
     useEffect(() => {
         if (!room) return;
@@ -31,6 +32,12 @@ function EnterRoom({ setAuth }) {
         return () => unsubscribe();
     }, [room]);
 
+    useEffect(() => {
+        addDoc(typingRef, { 
+            "room": cookies.get("room-name"), 
+            `${cookies.get("username")}`: true
+        })
+    }, [messageInputRef.current.value]);
     const createRoom = async () => {
         
         cookies.set("room-name", roomInputRef.current.value);
