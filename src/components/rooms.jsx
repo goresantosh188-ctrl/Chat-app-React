@@ -93,6 +93,7 @@ function EnterRoom({ setAuth }) {
             };
 
             const handleBlur = async (event) => {
+                console.log("blured")
                 const typingDoc = doc(database, "typing-in-room", `typing-doc-${cookies.get("room-name") ? cookies.get("room-name") : room}`)
                 await updateDoc(typingDoc, {
                     typers: typers.filter(typer => typer !== cookies.get("username"))
@@ -101,10 +102,10 @@ function EnterRoom({ setAuth }) {
             }
 
             document.addEventListener("keydown", handleKeyDown);
-            messageInputRef.current?.addEventListener("blur", handleBlur)
+            messageInputRef.current?.addEventListener("focusout", handleBlur)
             return () => {
                 document.removeEventListener("keydown", handleKeyDown);
-                messageInputRef.current?.removeEventListener("blur", handleBlur)
+                messageInputRef.current?.removeEventListener("focusout", handleBlur)
             };
         }, []);
 
@@ -124,9 +125,9 @@ function EnterRoom({ setAuth }) {
     const messagesInHTML = messages ? messages.map(message => {
         return(Boolean(messages) ? <p>{message.sender}: {message.message}</p> : null);
     }) : "";
-    const typingUsersInHTML = typers ? typers.map(typer => {
+    const typingUsersInHTML = typers ? typers.length === 1 || typers.length === 0 ? typers.map(typer => {
         return(Boolean(typers) ? <>{typer} is typing...</> : null);
-    }) : <></>;
+    }) : Boolean(typers) ? <>{typers.join().trim().replaceAll(",", " & ")} are typing...</> : null : <></>;
     console.log(typingUsersInHTML, typers)
     return(room 
            ? <> <div className={styles.roomContainer}>

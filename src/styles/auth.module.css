@@ -1,10 +1,23 @@
-.signUpForm, .signInForm, .forgotPasswordForm, .phoneSignInFormPreSMS, .phoneSignInFormPostSMS {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.signUpForm,
+.signInForm,
+.forgotPasswordForm,
+.phoneSignInFormPreSMS,
+.phoneSignInFormPostSMS {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  text-align: left;
 }
 
-.signUpForm:first-child, .signInForm:first-child {
-    margin-top: 10px !important;
-    margin-bottom: 10px;
+.signUpForm input,
+.signInForm input,
+.forgotPasswordForm input {
+  width: 100%;
+}
+
+.signUpForm button,
+.signInForm button {
+  align-self: center;
+  margin-top: 1rem;
 }
